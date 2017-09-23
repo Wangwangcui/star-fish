@@ -1,0 +1,35 @@
+package com.luangeng.zk;
+
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
+
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+
+/**
+ * Created by LG on 2017/9/23.
+ */
+public class ConnectionWatcher implements Watcher {
+
+    private static final int SESSION = 5000;
+
+    protected ZooKeeper zk;
+    private CountDownLatch latch = new CountDownLatch(1);
+
+    public void connect(String host) throws IOException, InterruptedException {
+        zk = new ZooKeeper(host, SESSION, this);
+        latch.await();
+    }
+
+    @Override
+    public void process(WatchedEvent watchedEvent) {
+        if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
+            latch.countDown();
+        }
+    }
+
+    public void close() throws InterruptedException {
+        zk.close();
+    }
+}
