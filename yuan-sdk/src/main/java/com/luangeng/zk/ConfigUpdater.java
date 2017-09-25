@@ -11,26 +11,27 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConfigUpdater {
 
-    public static final String PATH = "/config";
+    private String path;
     private Random random = new Random();
-    private ActiveKeyValueStore store;
 
-    public ConfigUpdater(String hosts) throws IOException, InterruptedException {
-        store = new ActiveKeyValueStore();
-        store.connect(hosts);
+    private ZkConfigService configSer = ZkConfigService.getInstance();
+
+    public ConfigUpdater(String path) {
+        this.path = path;
     }
 
     public static void main(String[] args) throws KeeperException, InterruptedException, IOException {
-        ConfigUpdater up = new ConfigUpdater("localhost");
+        ConfigUpdater up = new ConfigUpdater("db.url");
         up.run();
     }
 
     public void run() throws KeeperException, InterruptedException {
+        int i = 0;
         while (true) {
-            String value = random.nextInt(100) + "";
-            store.write(PATH, value);
-            System.out.printf("Set %s to %s\n", PATH, value);
-            TimeUnit.SECONDS.sleep(random.nextInt(10));
+            String value = i++ + "";
+            configSer.write(path, value);
+            System.out.printf("Set %s to %s\n", path, value);
+            TimeUnit.SECONDS.sleep(random.nextInt(5));
         }
     }
 }

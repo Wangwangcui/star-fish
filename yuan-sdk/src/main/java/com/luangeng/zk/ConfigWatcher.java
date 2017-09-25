@@ -11,23 +11,24 @@ import java.io.IOException;
  */
 public class ConfigWatcher implements Watcher {
 
-    private ActiveKeyValueStore store;
+    private String path;
 
-    public ConfigWatcher(String hosts) throws IOException, InterruptedException {
-        store = new ActiveKeyValueStore();
-        store.connect(hosts);
+    private ZkConfigService configSer = ZkConfigService.getInstance();
+
+    public ConfigWatcher(String path) {
+        this.path = path;
     }
 
     public static void main(String[] args) throws InterruptedException, KeeperException, IOException {
-        ConfigWatcher w = new ConfigWatcher("localhost");
+        ConfigWatcher w = new ConfigWatcher("db.url");
         w.display();
 
         Thread.sleep(Long.MAX_VALUE);
     }
 
     public void display() throws KeeperException, InterruptedException {
-        String value = store.read(ConfigUpdater.PATH, this);
-        System.out.printf("Read %s as %s\n", ConfigUpdater.PATH, value);
+        String value = configSer.read(path, this);
+        System.out.printf("Read %s as %s\n", path, value);
     }
 
     @Override
