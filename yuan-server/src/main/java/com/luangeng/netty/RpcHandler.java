@@ -1,5 +1,6 @@
 package com.luangeng.netty;
 
+import com.luangeng.app.SpringUtil;
 import com.luangeng.bean.RpcRequest;
 import com.luangeng.bean.RpcResponse;
 import io.netty.channel.ChannelFutureListener;
@@ -10,8 +11,6 @@ import net.sf.cglib.reflect.FastMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
 /**
  * Created by LG on 2017/9/28.
  */
@@ -19,16 +18,11 @@ public class RpcHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcHandler.class);
 
-    private final Map<String, Object> handlerMap;
-
-    public RpcHandler(Map map) {
-        this.handlerMap = map;
-    }
-
     @Override
     public void channelRead0(final ChannelHandlerContext ctx, RpcRequest request) throws Exception {
 
         RpcResponse response = new RpcResponse();
+        System.out.println(request.getRequestId() + ":" + request.getClassName());
         response.setRequestId(request.getRequestId());
         try {
             Object result = handle(request);
@@ -41,11 +35,11 @@ public class RpcHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     private Object handle(RpcRequest request) throws Throwable {
         String className = request.getClassName();
-        Object serviceBean = handlerMap.get(className);
+        Object serviceBean = SpringUtil.getImpl(className);
 
-        Class<?> serviceClass = serviceBean.getClass();
+        Class serviceClass = serviceBean.getClass();
         String methodName = request.getMethodName();
-        Class<?>[] parameterTypes = request.getParameterTypes();
+        Class[] parameterTypes = request.getParameterTypes();
         Object[] parameters = request.getParameters();
 
         /*Method method = serviceClass.getMethod(methodName, parameterTypes);

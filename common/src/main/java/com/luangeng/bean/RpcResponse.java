@@ -1,9 +1,11 @@
 package com.luangeng.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by LG on 2017/9/28.
  */
-public class RpcResponse {
+public class RpcResponse implements Serializable {
     private String requestId;
     private Throwable error;
     private Object result;

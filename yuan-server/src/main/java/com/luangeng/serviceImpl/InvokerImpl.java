@@ -6,7 +6,7 @@ import com.luangeng.service.Invoker;
 /**
  * Created by LG on 2017/9/29.
  */
-@RpcService(InvokerImpl.class)
+@RpcService(Invoker.class)
 public class InvokerImpl implements Invoker {
 
     @Override

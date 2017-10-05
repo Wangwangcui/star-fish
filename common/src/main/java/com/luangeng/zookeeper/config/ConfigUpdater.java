@@ -1,4 +1,4 @@
-package com.luangeng.config;
+package com.luangeng.zookeeper.config;
 
 import org.apache.zookeeper.KeeperException;
 

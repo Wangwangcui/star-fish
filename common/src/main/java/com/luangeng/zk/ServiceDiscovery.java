@@ -30,10 +30,10 @@ public class ServiceDiscovery {
     public ServiceDiscovery(String registryAddress) {
         this.registryAddress = registryAddress;
 
-        ZooKeeper zk = connectServer();
-        if (zk != null) {
-            watchNode(zk);
-        }
+//        ZooKeeper zk = connectServer();
+//        if (zk != null) {
+//            watchNode(zk);
+//        }
     }
 
     public Node discover() {

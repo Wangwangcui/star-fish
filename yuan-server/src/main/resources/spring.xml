@@ -11,6 +11,8 @@
 
     <context:property-placeholder location="classpath:config.properties"/>
 
+    <bean class="com.luangeng.app.SpringUtil"/>
+
     <!-- 配置服务注册组件 -->
     <bean id="serviceRegistry" class="com.luangeng.zk.ServiceRegistry">
         <constructor-arg name="registryAddress" value="${zk.address}"/>
