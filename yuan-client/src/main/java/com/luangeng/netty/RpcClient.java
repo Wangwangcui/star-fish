@@ -15,7 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class RpcClient {
 
-    private static Channel c;
+    public static Channel c;
 
     public static Channel connect(String host, int port) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -46,5 +46,6 @@ public class RpcClient {
 
     public void close() {
         //group.shutdownGracefully();
+        c = null;
     }
 }
